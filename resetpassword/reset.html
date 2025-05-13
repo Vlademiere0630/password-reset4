@@ -1,1 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reset Password</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
 
+    .popup-box {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .popup-box h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 24px;
+    }
+
+    .popup-box label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    .popup-box input[type="email"],
+    .popup-box input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    .popup-box button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .popup-box button:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="popup-box">
+    <h2>Reset Password</h2>
+    <form id="resetPasswordForm">
+
+      <label for="newPassword">New Password</label>
+      <input type="password" id="newPassword" name="newPassword" required>
+
+      <label for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+      <button type="submit">Reset Password</button>
+    </form>
+  </div>
+
+  <script>
+  document.getElementById("resetPasswordForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (newPassword !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("newPassword", newPassword);
+    formData.append("confirmPassword", confirmPassword);
+    formData.append("action", "resetPassword");
+
+    fetch("YOUR_GOOGLE_APPS_SCRIPT_URL", {
+      method: "POST",
+      body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+      if (data === "PasswordResetSuccess") {
+        alert("Password reset successfully!");
+        window.location.href = "YOUR_LOGIN_PAGE.html"; // Optional redirect
+      } else {
+        alert("Reset failed: " + data);
+      }
+    })
+    .catch(error => {
+      alert("Error: " + error.message);
+    });
+  });
+</script>
+</body>
+</html>
